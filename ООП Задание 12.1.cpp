@@ -21,19 +21,29 @@ int main()
        getline(inf, strInput);
        cout << strInput << endl;
     }
-    cout << "\n\nФайл слова из семи букв и более.\n\n";
     inf.seekg(0);
+    cout << "\n\nФайл слова из семи букв и более.\n\n";
+
+    fstream iofile("Skald.txt", ios::in | ios::out);
+    if (!iofile) {
+        cerr << "Невозможно открыть файл!";
+        exit(1);
+    }
+    char A;
+    while (iofile.get(A)) {
+        switch (A) {
+        case ',':
+        case '.':
+        case '!':
+            iofile.seekg(-1, ios::cur);
+            iofile << ' ';
+            iofile.seekg(iofile.tellg(), ios::beg);
+            break;
+        }
+    }
     while (!inf.eof()) {
         inf >> strInput;
-        int length = strInput.size();
-        char a = ',', b = '.', c = '!', d = '"';
-        if (strInput.find(a) || strInput.find(b) || strInput.find(c)) {
-            length -= 1;
-        }
-        else if (strInput.find(d)) {
-            length -= 2;
-        }
-        if (length >= 7) {
+        if(strInput.size() >= 7 ){
             cout << strInput << endl;
             ofstream outf("Seven letters.txt", ios::app);
             if (!outf) {
